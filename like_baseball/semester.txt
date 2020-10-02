@@ -1,0 +1,15 @@
+SEMESTER	FA19
+Klump	93	91	88
+Jones	88	97	92
+Smith	79	88	95
+SEMESTER	SP20
+Edwards	81	84	91
+Johnson	90	85	95
+Casey	91	98	88
+Howard	94	92	97
+Garcia	85	95	93
+SEMESTER	FA20
+Collins	77	81	96
+Morris	88	95	93
+Finch	94	93	90
+Butler	91	97	88
