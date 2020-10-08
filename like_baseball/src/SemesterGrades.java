@@ -34,15 +34,15 @@ public class SemesterGrades {
 		int pos = -1;
 		for (int i = 0; i < all.size(); i++) {
 			otherAvg = getAverage(all.get(i));
-			if (thisAvg > otherAvg) {
+			if (thisAvg > otherAvg) {     
 				pos = i;
-				break;
+				break;   // leaves the loop because the insert location
 			}
 		}
 		if (pos < 0) {
-			all.add(line);
+			all.add(line);  // append at the bottom of the list
 		} else {
-			all.add(pos,line);
+			all.add(pos,line);  // insert the new student (line) at location pos
 		}
 	}
 	public static void main(String[] args) {
