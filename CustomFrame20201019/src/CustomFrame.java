@@ -1,9 +1,13 @@
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.Container;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 class DrawingPanel extends JPanel {
     /* A JPanel is a lightweight component.
@@ -19,13 +23,33 @@ class DrawingPanel extends JPanel {
     }
 }
 
-class FancyCustomFrame extends JFrame {
+class ButtonHandler implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+		JOptionPane.showMessageDialog(null,"Hey. How you doin'?");
+	}
+}
+
+class FancyCustomFrame extends JFrame implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+		JOptionPane.showMessageDialog(null,"The frame itself generated this.");
+	}
     public void setLook(String title, int left, int top, int width, int height) {
         setTitle(title);
         setBounds(left, top, width, height);
         Container c = getContentPane();
         c.setLayout(new BorderLayout());
         JButton btnClick = new JButton("Click Me!");
+/*        btnClick.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+   //     		System.out.println("Hey. You clicked the button.");
+        		JOptionPane.showMessageDialog(null, "This is a popup dialog.");
+        	}
+        });
+*/
+/*        ButtonHandler handler = new ButtonHandler();
+        btnClick.addActionListener(handler);
+*/
+        btnClick.addActionListener(this); // this refers to the frame itself
         c.add(btnClick,BorderLayout.SOUTH);
         DrawingPanel panCenter = new DrawingPanel();
         c.add(panCenter,BorderLayout.CENTER);
