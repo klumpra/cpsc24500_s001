@@ -15,44 +15,79 @@ class DrawingPanel extends JPanel {
        Override the paintComponent funcion to draw on it.
        Let's see how.
     */
+	private int shapeType;    // 0 will mean oval, 1 will mean rectangle
+							  // information hiding 
+	public int getShapeType() {              // getter - retrieves private variable value
+		return shapeType;
+	}
+	/*
+	public void setShapeType(int val) {      // setters - sets private variable value
+		if (val < 0) {
+			shapeType = 0;
+		} else if (val > 1) {
+			shapeType = 1;
+		} else {
+			shapeType = val;
+		}
+	}
+	*/
+	public DrawingPanel() {
+		shapeType = 0;
+	}
+	public void toggleShape() {
+		if (shapeType == 0) {
+			shapeType = 1;
+		} else {
+			shapeType = 0;
+		}
+		repaint();  // this automatically calls paintComponent();
+	}
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);     // to draw the background and borders properly - call the ancestor
                                      // super is synonym for parent
-        g.drawOval(50,100,100,50);   // left top width and height within the panel
+        if (shapeType == 0) {
+        	g.drawOval(50,100,100,50);   // left top width and height within the panel
+        } else {
+        	g.drawRect(50, 100, 100, 50);
+        }
     }
 }
 
 class ButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-		JOptionPane.showMessageDialog(null,"Hey. How you doin'?");
+		JOptionPane.showMessageDialog(null,"An external named class generated this.");
 	}
 }
 
-class FancyCustomFrame extends JFrame implements ActionListener {
-	public void actionPerformed(ActionEvent e) {
+class FancyCustomFrame extends JFrame {
+/*	public void actionPerformed(ActionEvent e) {
 		JOptionPane.showMessageDialog(null,"The frame itself generated this.");
 	}
+*/
     public void setLook(String title, int left, int top, int width, int height) {
         setTitle(title);
         setBounds(left, top, width, height);
         Container c = getContentPane();
         c.setLayout(new BorderLayout());
-        JButton btnClick = new JButton("Click Me!");
-/*        btnClick.addActionListener(new ActionListener() {
+        DrawingPanel panCenter = new DrawingPanel();
+        c.add(panCenter,BorderLayout.CENTER);
+        JButton btnClick = new JButton("Toggle!");
+        btnClick.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-   //     		System.out.println("Hey. You clicked the button.");
-        		JOptionPane.showMessageDialog(null, "This is a popup dialog.");
+      //  		JOptionPane.showMessageDialog(null, "This was created by an anonymous inner class.");
+        		panCenter.toggleShape();
+        		System.out.println(panCenter.getShapeType());
+        		repaint();  // tell the whole frame to repaint
         	}
         });
-*/
+
 /*        ButtonHandler handler = new ButtonHandler();
         btnClick.addActionListener(handler);
 */
-        btnClick.addActionListener(this); // this refers to the frame itself
+
+//        btnClick.addActionListener(this); // this refers to the frame itself
         c.add(btnClick,BorderLayout.SOUTH);
-        DrawingPanel panCenter = new DrawingPanel();
-        c.add(panCenter,BorderLayout.CENTER);
     }
     public FancyCustomFrame() {  // default constructor
         setLook("Fancy Custom Frame",100,100,500,500);  // delegation
@@ -68,7 +103,5 @@ public class CustomFrame {
     public static void main(String[] args) {
         FancyCustomFrame frm = new FancyCustomFrame();
         frm.setVisible(true);
-        FancyCustomFrame frm2 = new FancyCustomFrame("My frame", 300, 300, 500,200, JFrame.HIDE_ON_CLOSE);
-        frm2.setVisible(true);
     }
 }
