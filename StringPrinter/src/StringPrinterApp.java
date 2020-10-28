@@ -1,15 +1,20 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -46,13 +51,25 @@ class StringPanel extends JPanel {
 	}
 }
 class StringPrinterFrame extends JFrame {
+	private StringPanel panCenter;
+	public void centerFrame() {
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension dim = tk.getScreenSize();  // width and height
+		int screenWidth = (int)dim.getWidth();
+		int screenHeight = (int)dim.getHeight();
+		int frameWidth = 750;
+		int frameHeight = 500;
+		int left = (screenWidth-frameWidth)/2;
+		int top = (screenHeight - frameHeight)/2;
+		setBounds(left,top,frameWidth,frameHeight);
+	}
 	public void setupLook() {
 		setTitle("String Printer");
-		setBounds(100,100,500,500);
+		centerFrame();
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
-		StringPanel panCenter = new StringPanel();
-		panCenter.setText("It is only Monday and that sucks.");
+		panCenter = new StringPanel();
+		panCenter.setText("Welcome to my program.");
 		c.add(panCenter,BorderLayout.CENTER);
 		JPanel panSouth = new JPanel();
 		panSouth.setLayout(new FlowLayout());
@@ -78,6 +95,37 @@ class StringPrinterFrame extends JFrame {
 		);
 		panSouth.add(btnChange);
 		c.add(panSouth,BorderLayout.SOUTH);
+		setupMenu();
+	}
+	public void setupMenu() {
+		JMenuBar mbar = new JMenuBar();
+		JMenu mnuFile = new JMenu("File");
+		JMenuItem miClear = new JMenuItem("Clear");
+		miClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panCenter.setText("Welcome to my program.");
+				repaint();
+			}
+		});
+		JMenuItem miExit = new JMenuItem("Exit");
+		miExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		mnuFile.add(miClear);
+		mnuFile.add(miExit);
+		mbar.add(mnuFile);
+		JMenu mnuHelp = new JMenu("Help");
+		JMenuItem miAbout = new JMenuItem("About");
+		miAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Copyright 2020 by Ray Klump");
+			}
+		});
+		mnuHelp.add(miAbout);
+		mbar.add(mnuHelp);
+		setJMenuBar(mbar);
 	}
 	public StringPrinterFrame() {
 		setupLook();
