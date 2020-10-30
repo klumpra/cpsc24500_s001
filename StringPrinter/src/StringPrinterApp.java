@@ -86,9 +86,22 @@ class StringPrinterFrame extends JFrame {
 		JButton btnChange = new JButton("Change");
 		btnChange.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panCenter.setText(txtStringToShow.getText());
-				panCenter.setFont(txtFontName.getText(), 
-						Integer.parseInt(txtFontSize.getText()));
+				String fontName = txtFontName.getText().trim();
+				int fontSize;
+				try {
+					fontSize = Integer.parseInt(txtFontSize.getText());
+				} catch (Exception ex) {
+					fontSize = -1;
+				}
+				if (fontName.length() == 0) {
+					JOptionPane.showMessageDialog(null, "You can't leave the font name blank.");
+				} else if (fontSize == -1) {
+					JOptionPane.showMessageDialog(null, "The font size must be an integer.");
+				} else {
+					panCenter.setText(txtStringToShow.getText());
+					panCenter.setFont(txtFontName.getText(), 
+							Integer.parseInt(txtFontSize.getText()));
+				}
 				repaint();  // forces the whole window to repaint.
 			}
 		}		
