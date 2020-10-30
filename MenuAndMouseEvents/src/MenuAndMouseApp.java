@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,7 +15,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-class MenuAndMouseApp extends JFrame {
+class DrawingPanel extends JPanel {
+	private String mouseStatus;
+	public DrawingPanel() {
+		mouseStatus = "Welcome";
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawString(mouseStatus, 20, 20);
+	}
+	public String getMouseStatus() {
+		return mouseStatus;
+	}
+	public void setMouseStatus(String ms) {
+		mouseStatus = ms;
+	}
+}
+class MenuAndMouseFrame extends JFrame {
 	private DrawingPanel pan;
 	public void setupMenu() {
 		JMenuBar mbar = new JMenuBar();
@@ -22,6 +40,8 @@ class MenuAndMouseApp extends JFrame {
 		JMenuItem miClear = new JMenuItem("Clear");
 		miClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				pan.setMouseStatus("");
+				repaint();
 			}
 		});
 		JMenuItem miExit = new JMenuItem("Exit");
@@ -48,7 +68,7 @@ class MenuAndMouseApp extends JFrame {
 		setBounds(100,100,500,500);
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
-		pan = new JPanel();
+		pan = new DrawingPanel();
 		c.add(pan,BorderLayout.CENTER);
 		JPanel panSouth = new JPanel();
 		panSouth.setLayout(new FlowLayout());
@@ -69,7 +89,7 @@ class MenuAndMouseApp extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 }
-public class MenuAndMouseExample {
+public class MenuAndMouseApp {
 	public static void main(String[] args) {
 		MenuAndMouseFrame frm = new MenuAndMouseFrame();
 		frm.setVisible(true);
