@@ -20,15 +20,21 @@ import javax.swing.JTextField;
 
 class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener {
 	private String mouseStatus;
+	private int x, y;   // where the user last clicked
 	public DrawingPanel() {
 		mouseStatus = "Welcome";
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		x = -1;   // off screen
+		y = -1; 
 	}
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawString(mouseStatus, 20, 20);
+		if (x >= 0 && y >= 0) {   // don't draw stuff that is off screen
+			g.fillOval(x-25,y-25,50,50);
+		}
 	}
 	public String getMouseStatus() {
 		return mouseStatus;
@@ -49,6 +55,8 @@ class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		mouseStatus = String.format("mouse clicked at (%d, %d)", e.getX(),e.getY());
+		x = e.getX();
+		y = e.getY();
 		repaint();
 	}
 	@Override
