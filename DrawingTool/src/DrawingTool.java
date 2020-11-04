@@ -61,12 +61,26 @@ class Dot {  // model  -  data
 	// It allows us to System.out.println(that object) to print a text representation of the object
 	@Override
 	public String toString() {  // comes from java.lang.Object
-		return String.format("%d %d %d %s",x,y,radius);
+		return String.format("%d %d %d",x,y,radius);
 	}
 }
 class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener {  // view class
 	private String mouseStatus;
 	private ArrayList<Dot> dots; 
+	private int dotSize;
+	public int getDotSize() {
+		return dotSize;
+	}
+	public void setDotSize(int ds) {
+		if (ds <= 0) {
+			dotSize = 1;
+		} else {
+			dotSize = ds;
+		}
+	}
+	public void clearDots() {
+		dots.clear();
+	}
 	public ArrayList<Dot> getDots() {
 		return dots;
 	}
@@ -78,6 +92,7 @@ class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		dots = new ArrayList<Dot>();
+		dotSize = 20;
 	}
 	@Override
 	public void paintComponent(Graphics g) {
@@ -127,7 +142,7 @@ class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseStatus = String.format("mouse dragging at (%d, %d)", e.getX(),e.getY());
-		Dot dotty = new Dot(e.getX(),e.getY(),20); 
+		Dot dotty = new Dot(e.getX(),e.getY(),dotSize); 
 		dots.add(dotty);
 		repaint();
 	}
@@ -142,6 +157,7 @@ class MenuAndMouseFrame extends JFrame {
 		miClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pan.setMouseStatus("");
+				pan.clearDots();
 				repaint();
 			}
 		});
@@ -179,6 +195,12 @@ class MenuAndMouseFrame extends JFrame {
 		JButton btnChange = new JButton("Change");
 		btnChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					int ds = Integer.parseInt(txtSize.getText());
+					pan.setDotSize(ds);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null,"The size must be an integer.");
+				}
 			}
 		});
 		panSouth.add(btnChange);
@@ -190,9 +212,10 @@ class MenuAndMouseFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 }
-public class MenuAndMouseApp {
+public class DrawingTool {
 	public static void main(String[] args) {
 		MenuAndMouseFrame frm = new MenuAndMouseFrame();
 		frm.setVisible(true);
+		Dot dotty = new Dot(17,16,4);
 	}
 }
