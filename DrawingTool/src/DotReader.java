@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,13 +23,15 @@ public class DotReader {
 			int xpos, ypos, rad;
 			Dot dot;
 			while (fsc.hasNextLine()) {
-				line = fsc.nextLine();
-				parts = line.split(" ");
-				xpos = Integer.parseInt(parts[0]);
-				ypos = Integer.parseInt(parts[1]);
-				rad = Integer.parseInt(parts[2]);
-				dot = new Dot(xpos, ypos, rad);
-				result.add(dot);
+				line = fsc.nextLine().trim();  // get rid of whitespace at the end
+				if (line.length() > 0) {  // prevent processing a blank line
+					parts = line.split(" ");
+					xpos = Integer.parseInt(parts[0]);
+					ypos = Integer.parseInt(parts[1]);
+					rad = Integer.parseInt(parts[2]);
+					dot = new Dot(xpos, ypos, rad);
+					result.add(dot);
+				}
 			}
 			fsc.close();
 			return result; 
@@ -36,5 +40,19 @@ public class DotReader {
 			return null;  // object equivalent to false 
 		}
 	}
-
+	public ArrayList<Dot> readFromBinary(String fname) {
+		File f = new File(fname);
+		return readFromBinary(f);
+	}
+	public ArrayList<Dot> readFromBinary(File f) {
+		try {
+			ArrayList<Dot> dotsRead;
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			dotsRead = (ArrayList<Dot>)ois.readObject();
+			ois.close();
+			return dotsRead;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 }

@@ -1,4 +1,6 @@
-public class Dot {  // model  -  data
+import java.io.Serializable;
+
+public class Dot implements Serializable {  // model  -  data
 	private int x;
 	private int y;
 	private int radius;

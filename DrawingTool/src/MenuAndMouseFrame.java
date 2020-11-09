@@ -3,6 +3,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,7 +27,7 @@ class MenuAndMouseFrame extends JFrame {
 				JFileChooser jfc = new JFileChooser();
 				DotWriter dw = new DotWriter();
 				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) { // the user wants to go ahead
-					if (dw.writeToText(jfc.getSelectedFile(), pan.getDots())) {
+					if (dw.writeToBinary(jfc.getSelectedFile(), pan.getDots())) {
 						JOptionPane.showMessageDialog(null,"Wrote dots to file.");
 					} else {
 						JOptionPane.showMessageDialog(null,"Could not write dots to file.");
@@ -35,6 +36,23 @@ class MenuAndMouseFrame extends JFrame {
 			}
 		});
 		mnuFile.add(miSave);
+		JMenuItem miLoad = new JMenuItem("Load");
+		miLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DotReader dr = new DotReader();
+				JFileChooser jfc = new JFileChooser();
+				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					ArrayList<Dot> dotsRead = dr.readFromBinary(jfc.getSelectedFile());
+					if (dotsRead == null) {
+						JOptionPane.showMessageDialog(null,"Could not read dots from file.");
+					} else {
+						pan.setDots(dotsRead);
+						repaint();
+					}
+				}
+			}
+		});
+		mnuFile.add(miLoad);
 		JMenuItem miClear = new JMenuItem("Clear");
 		miClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -1,6 +1,8 @@
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -33,6 +35,22 @@ public class DotWriter {
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean writeToBinary(String fname, ArrayList<Dot> dots) {
+		File f = new File(fname);
+		return writeToBinary(f,dots);
+	}
+	
+	public boolean writeToBinary(File f, ArrayList<Dot> dots) {
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
+			oos.writeObject(dots);
+			oos.close();
+			return true; // success
+		} catch (Exception ex) {
 			return false;
 		}
 	}
