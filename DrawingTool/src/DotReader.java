@@ -55,4 +55,18 @@ public class DotReader {
 			return null;
 		}
 	}
+	public ArrayList<Dot> read(String fname) {
+		File f = new File(fname);
+		return read(f);
+	}
+	public ArrayList<Dot> read(File f) {
+		String fname = f.getName().toUpperCase();
+		if (fname.endsWith(".TXT")) {
+			return readFromText(f);
+		}
+		if (fname.endsWith(".BIN")) {
+			return readFromBinary(f);
+		}
+		return null;  // unrecognize file type.
+	}
 }

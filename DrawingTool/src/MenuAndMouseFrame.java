@@ -27,7 +27,7 @@ class MenuAndMouseFrame extends JFrame {
 				JFileChooser jfc = new JFileChooser();
 				DotWriter dw = new DotWriter();
 				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) { // the user wants to go ahead
-					if (dw.writeToBinary(jfc.getSelectedFile(), pan.getDots())) {
+					if (dw.write(jfc.getSelectedFile(), pan.getDots())) {
 						JOptionPane.showMessageDialog(null,"Wrote dots to file.");
 					} else {
 						JOptionPane.showMessageDialog(null,"Could not write dots to file.");
@@ -42,7 +42,7 @@ class MenuAndMouseFrame extends JFrame {
 				DotReader dr = new DotReader();
 				JFileChooser jfc = new JFileChooser();
 				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					ArrayList<Dot> dotsRead = dr.readFromBinary(jfc.getSelectedFile());
+					ArrayList<Dot> dotsRead = dr.read(jfc.getSelectedFile());
 					if (dotsRead == null) {
 						JOptionPane.showMessageDialog(null,"Could not read dots from file.");
 					} else {

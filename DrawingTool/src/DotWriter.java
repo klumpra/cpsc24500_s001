@@ -1,3 +1,5 @@
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,12 +40,10 @@ public class DotWriter {
 			return false;
 		}
 	}
-	
 	public boolean writeToBinary(String fname, ArrayList<Dot> dots) {
 		File f = new File(fname);
 		return writeToBinary(f,dots);
 	}
-	
 	public boolean writeToBinary(File f, ArrayList<Dot> dots) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
@@ -53,5 +53,48 @@ public class DotWriter {
 		} catch (Exception ex) {
 			return false;
 		}
+	}
+	public boolean writeToXML(String fname, ArrayList<Dot> dots) {
+		File f = new File(fname);
+		return writeToXML(f,dots);
+	}
+	public boolean writeToXML(File f, ArrayList<Dot> dots) {
+		try {
+			XMLEncoder enc = new XMLEncoder(new 
+					BufferedOutputStream(new FileOutputStream(f)));
+			enc.writeObject(dots);
+			enc.close();			
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+	public boolean write(String fname, ArrayList<Dot> dots) {
+		File f = new File(fname);
+		return write(f,dots);
+	}
+	/**
+	 * This writes dot data to whatever file format the user wants
+	 * based on the extension of the file's name
+	 * .txt - text
+	 * .bin = binary
+	 * .xml - xml
+	 * .jsn or .json - json
+	 * @param f the file object
+	 * @param dots the list of dots to write
+	 * @return true if successful, false otherwise
+	 */
+	public boolean write(File f, ArrayList<Dot> dots) {
+		String fname = f.getName().toUpperCase();
+		if (fname.endsWith(".TXT")) {
+			return writeToText(f,dots);
+		}
+		if (fname.endsWith(".BIN")) {
+			return writeToBinary(f,dots);
+		}
+		if (fname.endsWith(".XML")) {
+			return writeToXML(f,dots);
+		}
+		return false;  // invalid or unrecognized file type
 	}
 }
