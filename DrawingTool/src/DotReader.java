@@ -1,3 +1,5 @@
+import java.beans.XMLDecoder;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -55,6 +57,22 @@ public class DotReader {
 			return null;
 		}
 	}
+	public ArrayList<Dot> readFromXML(String fname) {
+		File f = new File(fname);
+		return readFromXML(f);
+	}
+	public ArrayList<Dot> readFromXML(File f) {
+		try {
+			ArrayList<Dot> dotsRead;
+			XMLDecoder dec = new XMLDecoder(
+					new BufferedInputStream(new FileInputStream(f)));
+			dotsRead = (ArrayList<Dot>)dec.readObject();
+			dec.close();
+			return dotsRead;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 	public ArrayList<Dot> read(String fname) {
 		File f = new File(fname);
 		return read(f);
@@ -66,6 +84,9 @@ public class DotReader {
 		}
 		if (fname.endsWith(".BIN")) {
 			return readFromBinary(f);
+		}
+		if (fname.endsWith(".XML")) {
+			return readFromXML(f);
 		}
 		return null;  // unrecognize file type.
 	}
