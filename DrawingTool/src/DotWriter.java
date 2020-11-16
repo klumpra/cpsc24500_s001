@@ -8,6 +8,9 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 /**
  * Writes Dot objects in a variety of file formats.
  * Specifically, it writes text, binary, xml, and json formats for Dot objects.
@@ -69,6 +72,35 @@ public class DotWriter {
 			return false;
 		}
 	}
+	public boolean writeToJSON(String fname, ArrayList<Dot> dots) {
+		File f = new File(fname);
+		return writeToJSON(f,dots);
+	}
+	public boolean writeToJSON(File f, ArrayList<Dot> dots) {
+		try {
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)));
+			// define the JSONArray that will hold all the JSon dot objects
+			JSONArray array = new JSONArray();
+			// define the variable that will the JSON object wrapper for each dot
+			JSONObject dotObj;
+			for (Dot dot : dots) {
+				// create the JSON wrapper object
+				dotObj = new JSONObject();
+				dotObj.put("x",dot.getX());
+				dotObj.put("y",dot.getY());
+				dotObj.put("rad",dot.getRadius());
+				array.add(dotObj);
+			}
+			// create the outer JSON object, whose value is the array we just filled
+			JSONObject allDots = new JSONObject();
+			allDots.put("dots",array);
+			pw.println(allDots.toJSONString());
+			pw.close();
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
 	public boolean write(String fname, ArrayList<Dot> dots) {
 		File f = new File(fname);
 		return write(f,dots);
@@ -94,6 +126,9 @@ public class DotWriter {
 		}
 		if (fname.endsWith(".XML")) {
 			return writeToXML(f,dots);
+		}
+		if (fname.endsWith(".JSN") || (fname.endsWith(".JSON"))) {
+			return writeToJSON(f,dots);
 		}
 		return false;  // invalid or unrecognized file type
 	}
