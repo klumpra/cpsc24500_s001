@@ -7,7 +7,8 @@ public class ArticleApp {
 		System.out.println("2. Print articles");
 		System.out.println("3. Save articles to JSON");
 		System.out.println("4. Delete articles");
-		System.out.println("5. Exit");
+		System.out.println("5. Read articles from JSON");
+		System.out.println("6. Exit");
 		System.out.print("Enter your choice: ");
 		int result = sc.nextInt();
 		sc.nextLine(); // the end-of-line the accompanied what the user typed
@@ -28,6 +29,7 @@ public class ArticleApp {
 		String path;
 		Article article;
 		ArticleWriter aw = new ArticleWriter();
+		ArticleReader ar = new ArticleReader();
 		// this do loop will keep on offering the user choices
 		// they will be able to create articles, print them to the
 		// screen, remove an article, and write to json
@@ -56,8 +58,51 @@ public class ArticleApp {
 				System.out.print("Enter number of article to delete: ");
 				toRemove = sc.nextInt();
 				articles.remove(toRemove);
+			} else if (choice == 5) {   // load from JSON
+				System.out.print("Enter the name of the file: ");
+				path = sc.nextLine();
+				articles = ar.readFromJSON(path);
+				if (articles == null) {
+					System.out.println("Couldn't read the articles.");
+				} else {
+					System.out.println("Read articles.");
+				}
 			}
-		} while (choice != 5);
+		} while (choice != 6);
 		System.out.println("Thank you.");
 	}
 }
+
+/*
+ * BTW, here's the code for the website:
+ * 
+<html>
+<head></head>
+<body>
+<div id="id01"></div>
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "articles.json";
+xmlhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		var resp = JSON.parse(this.responseText);
+		myFunction(resp);
+	}
+}
+xmlhttp.open("GET",url,true);
+xmlhttp.send();
+function myFunction(resp) {
+	var out = "";
+	var i;
+	for (i = 0; i < resp.articles.length; i++) {
+		out += "<h1>" + resp.articles[i].title + "</h1><h3>" + 
+			resp.articles[i].author + "</h3><p>" + 
+			resp.articles[i].text + "</p><br/><hr/>";
+	}
+	document.getElementById("id01").innerHTML = out;
+}
+</script>
+</body>
+</html>
+
+*/
