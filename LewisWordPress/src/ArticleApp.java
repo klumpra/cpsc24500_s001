@@ -8,7 +8,8 @@ public class ArticleApp {
 		System.out.println("3. Save articles to JSON");
 		System.out.println("4. Delete articles");
 		System.out.println("5. Read articles from JSON");
-		System.out.println("6. Exit");
+		System.out.println("6. Write to text");
+		System.out.println("7. Exit");
 		System.out.print("Enter your choice: ");
 		int result = sc.nextInt();
 		sc.nextLine(); // the end-of-line the accompanied what the user typed
@@ -30,6 +31,7 @@ public class ArticleApp {
 		Article article;
 		ArticleWriter aw = new ArticleWriter();
 		ArticleReader ar = new ArticleReader();
+		ObjectWriter<Article> writer = new ObjectWriter<Article>();
 		// this do loop will keep on offering the user choices
 		// they will be able to create articles, print them to the
 		// screen, remove an article, and write to json
@@ -67,8 +69,12 @@ public class ArticleApp {
 				} else {
 					System.out.println("Read articles.");
 				}
+			} else if (choice == 6) {
+				System.out.print("Enter the name of the file: ");
+				path = sc.nextLine();
+				writer.writeToText(path,articles);
 			}
-		} while (choice != 6);
+		} while (choice != 7);
 		System.out.println("Thank you.");
 	}
 }
